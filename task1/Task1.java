@@ -27,7 +27,7 @@ public class Task1 {
         System.out.println();
         LinkedList<Integer> arr = new LinkedList<>();
 
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 11; i++) {
             arr.add(i);
         }
 
