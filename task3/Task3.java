@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Task3 {
 
-    private static void operationsMenu(DecimalFormat numFormat, Scanner scanner, double res) {
+    private static void operationsMenu(DecimalFormat numFormat, Scanner scanner, double res, double previous) {
         System.out.println("\033[H\033[2J");
         System.out.println();
         System.out.println("      МЕНЮ ОПЕРАЦИЙ");
@@ -22,20 +22,20 @@ public class Task3 {
         System.out.print("Введите цифру из меню: ");
         int userInput = scanner.nextInt();
         if (userInput == 1) {
-            sumNum(numFormat, scanner, res);
+            sumNum(numFormat, scanner, res, previous);
         }
         if (userInput == 2) {
-            diffNum(numFormat, scanner, res);
+            diffNum(numFormat, scanner, res, previous);
         }
         if (userInput == 3) {
-            prodNum(numFormat, scanner, res);
+            prodNum(numFormat, scanner, res, previous);
         }
         if (userInput == 4) {
-            divideNum(numFormat, scanner, res);
+            divideNum(numFormat, scanner, res, previous);
         }
     }
 
-    private static void table(DecimalFormat numFormat, Scanner scanner, double res) {
+    private static void table(DecimalFormat numFormat, Scanner scanner, double res, double previous) {
         System.out.println("\033[H\033[2J");
         System.out.println();
         System.out.println("ТЕКУЩЕЕ ЗНАЧЕНИЕ НА ТАБЛО");
@@ -46,10 +46,10 @@ public class Task3 {
         System.out.print("Введите число: ");
         double userIput = scanner.nextDouble();
         res = userIput;
-        calc(numFormat, scanner, res);
+        calc(numFormat, scanner, res, previous);
     }
 
-    private static void calc(DecimalFormat numFormat, Scanner scanner, double res) {
+    private static void calc(DecimalFormat numFormat, Scanner scanner, double res, double previous) {
         System.out.println("\033[H\033[2J");
         System.out.println();
         System.out.println(" ТЕКУЩЕЕ ЗНАЧЕНИЕ НА ТАБЛО");
@@ -67,54 +67,63 @@ public class Task3 {
         System.out.println();
         System.out.println("3. Очистить табло");
         System.out.println();
-        System.out.println("4. Закрыть калькулятор");
+        System.out.println("4. Отменить последнюю операцию");
+        System.out.println();
+        System.out.println("5. Закрыть калькулятор");
         System.out.println();
         System.out.print("Введите цифру из меню: ");
         int userInput = scanner.nextInt();
         if (userInput == 1) {
-            table(numFormat, scanner, res);
+            table(numFormat, scanner, res, previous);
         }
         if (userInput == 2) {
-            operationsMenu(numFormat, scanner, res);
+            operationsMenu(numFormat, scanner, res, previous);
         }
         if (userInput == 3) {
             res = 0;
-            calc(numFormat, scanner, res);
+            calc(numFormat, scanner, res, previous);
         }
-        if (userInput == 4) {
+        if (userInput == 4){
+            res = previous;
+            calc(numFormat, scanner, res, previous);
+        }
+        if (userInput == 5) {
             System.out.println("\033[H\033[2J");
             return;
         }
     }
 
-    private static void sumNum(DecimalFormat numFormat, Scanner scanner, double res) {
+    private static void sumNum(DecimalFormat numFormat, Scanner scanner, double res, double previous) {
         System.out.println("\033[H\033[2J");
         System.out.println();
         System.out.print("Введите число: ");
         double num = scanner.nextDouble();
         double op = res + num;
-        calc(numFormat, scanner, op);
+        previous = res;
+        calc(numFormat, scanner, op, previous);
     }
 
-    private static void diffNum(DecimalFormat numFormat, Scanner scanner, double res) {
+    private static void diffNum(DecimalFormat numFormat, Scanner scanner, double res, double previous) {
         System.out.println("\033[H\033[2J");
         System.out.println();
         System.out.print("Введите число: ");
         double num = scanner.nextDouble();
         double op = res - num;
-        calc(numFormat, scanner, op);
+        previous = res;
+        calc(numFormat, scanner, op, previous);
     }
 
-    private static void prodNum(DecimalFormat numFormat, Scanner scanner, double res) {
+    private static void prodNum(DecimalFormat numFormat, Scanner scanner, double res, double previous) {
         System.out.println("\033[H\033[2J");
         System.out.println();
         System.out.print("Введите число: ");
         double num = scanner.nextDouble();
         double op = res * num;
-        calc(numFormat, scanner, op);
+        previous = res;
+        calc(numFormat, scanner, op, previous);
     }
 
-    private static void divideNum(DecimalFormat numFormat, Scanner scanner, double res) {
+    private static void divideNum(DecimalFormat numFormat, Scanner scanner, double res, double previous) {
         System.out.println("\033[H\033[2J");
         System.out.println();
         System.out.print("Введите число: ");
@@ -125,15 +134,16 @@ public class Task3 {
             System.out.println();
             System.out.print("Введите q для возврата в Основное меню: ");
             String userWait = scanner.next();
-            if (userWait == "q" || userWait == "Q"){
-                calc(numFormat, scanner, res);
-            }  else {
-                calc(numFormat, scanner, res);
+            previous = res;
+            if (userWait == "q" || userWait == "Q") {
+                calc(numFormat, scanner, res, previous);
+            } else {
+                calc(numFormat, scanner, res, previous);
             }
-        }  else {
+        } else {
             double op = res / num;
-            calc(numFormat, scanner, op);
-            }
+            calc(numFormat, scanner, op, previous);
+        }
     }
 
     public static void main(String[] args) {
@@ -141,8 +151,9 @@ public class Task3 {
         DecimalFormat numFormat = new DecimalFormat();
         numFormat.setDecimalSeparatorAlwaysShown(false);
         double res = 0;
+        double previous = 0;
         numFormat.format(res);
-        calc(numFormat, scanner, res);
+        calc(numFormat, scanner, res, previous);
         scanner.close();
     }
 }
